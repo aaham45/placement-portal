@@ -6,7 +6,7 @@
       "use": "@vercel/static-build",
       "config": {
         "distDir": "dist",
-        "buildCommand": "npx vite build"
+        "buildCommand": "npx --yes vite build"
       }
     }
   ],
