@@ -267,7 +267,7 @@ function ForgotPassword() {
                     onClick={() => setShowPassword(!showPassword)}
                     style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer' }}
                   >
-                    {showPassword ? <EyeOff size={16} color="#94a3b8" /> : <Eye size={16} color="#94a3b8' />}
+                    {showPassword ? <EyeOff size={16} color="#94a3b8" /> : <Eye size={16} color="#94a3b8" />}
                   </button>
                 </div>
               </div>
