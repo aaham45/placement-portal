@@ -237,8 +237,7 @@ function ForgotPassword() {
                   <KeyRound size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
                   <input
                     type="text"
-                    autoComplete="off"           // ✅ Browser OTP autofill band kiya
-                    autoComplete="one-time-code" // ✅ Browser ko bata diya ki ye OTP hai, save mat karo
+                    autoComplete="one-time-code"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
                     placeholder="Enter 6-digit OTP"
