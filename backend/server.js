@@ -16,7 +16,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// ✅ CORS - COMPLETE FIX (Allow all origins)
+// ✅ ========== CORS - COMPLETE FIX ==========
 app.use(cors({
   origin: '*',
   credentials: true,
@@ -25,17 +25,27 @@ app.use(cors({
 }));
 
 // ✅ Handle preflight requests
-app.options('*', cors());
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.sendStatus(200);
+});
+
+// ✅ Force CORS headers on all responses
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
+});
 
 // ✅ COOP and COEP Headers
 app.use((req, res, next) => {
   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
   res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
   res.setHeader('Cross-Origin-Embedder-Policy', 'unsafe-none');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Connection', 'keep-alive');
   res.removeHeader('Upgrade');
   next();
 });
@@ -56,18 +66,7 @@ app.use(fileUpload({
 }));
 
 // ✅ STATIC FILES
-app.use('/uploads', (req, res, next) => {
-  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
-  res.setHeader('Cross-Origin-Embedder-Policy', 'unsafe-none');
-  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.removeHeader('Upgrade');
-  next();
-}, express.static(path.join(__dirname, 'uploads')));
-
-app.use('/uploads/resumes', express.static(path.join(__dirname, 'uploads/resumes')));
-app.use('/uploads/profile-pics', express.static(path.join(__dirname, 'uploads/profile-pics')));
-app.use('/uploads/company-logos', express.static(path.join(__dirname, 'uploads/company-logos')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ✅ Ensure upload directories exist
 const fs = require('fs');
