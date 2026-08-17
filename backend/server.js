@@ -16,45 +16,16 @@ app.use((req, res, next) => {
   next();
 });
 
-// ✅ CORS - ALLOW ALL (For Production)
-const allowedOrigins = [
-  'http://localhost:5173',
-  'http://127.0.0.1:5173',
-  'http://localhost:5174',
-  'http://127.0.0.1:5174',
-  'http://localhost:5000',
-  'https://placement-portal.vercel.app',
-  'https://placement-portal-6h8v-qs8xm7njd-aahamkumararya1-4850s-projects.vercel.app',
-  /\.vercel\.app$/,  // ✅ Any Vercel URL
-  /\.render\.com$/   // ✅ Any Render URL
-];
-
+// ✅ CORS - COMPLETE FIX (Allow all origins)
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    // Check if origin matches any allowed origin
-    const allowed = allowedOrigins.some(allowedOrigin => {
-      if (typeof allowedOrigin === 'string') {
-        return origin === allowedOrigin;
-      } else if (allowedOrigin instanceof RegExp) {
-        return allowedOrigin.test(origin);
-      }
-      return false;
-    });
-    
-    if (allowed) {
-      callback(null, true);
-    } else {
-      console.log(`❌ CORS blocked: ${origin}`);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: '*',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
 }));
+
+// ✅ Handle preflight requests
+app.options('*', cors());
 
 // ✅ COOP and COEP Headers
 app.use((req, res, next) => {
